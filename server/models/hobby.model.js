@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const Mschema = mongoose.Schema()
-mongoose.set('useFindAndModify', false)
 
-const hobbySchema = new Mschema({
+
+const hobbySchema = new mongoose.Schema({
     title:String, 
     description:String
 })

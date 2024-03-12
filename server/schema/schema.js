@@ -1,8 +1,8 @@
 const graphql = require('graphql');
 var lodash = require('lodash');
-const userData = require('../models/user.model')
-const userHobby = require('../models/hobby.model')
-const { userPost } = require('../database/data');
+const User = require('../models/user.model')
+const Hobby = require('../models/hobby.model')
+const Post = require('../database/data');
 
 
 // Creating type
@@ -72,14 +72,16 @@ const RootQuery = new graphql.GraphQLObjectType({
             args: { id: { type: graphql.GraphQLString } },
             resolve(parent, args) {
                 // Implement your resolve function here to fetch and return user data
-                return lodash.find(userData, { id: args.id })
-
+                return User.findById(args.id)
+                    .exec();
             }
         },
         users: {
             type: new graphql.GraphQLList(userType),
             resolve: () => {
-                return userData
+                // Fetch all users from MongoDB using Mongoose
+                return User.find({})
+                           .exec(); // Execute the query as a promise
             }
         },
 
@@ -109,19 +111,19 @@ const Mutation = new graphql.GraphQLObjectType({
         createUser: {
             type: userType,
             args: {
-                id: { type: graphql.GraphQLString },
+                // id: { type: graphql.GraphQLString },
                 name: { type: graphql.GraphQLString },
                 age: { type: graphql.GraphQLInt },
                 profession: { type: graphql.GraphQLString }
             },
             resolve(parent, args) {
-                let user = {
-                    id: args.id,
+                let user = User({
+                    // id: args.id,
                     name: args.name,
                     age: args.age,
                     profession: args.profession
-                };
-                return user
+                });
+                return user.save()
 
             }
         },
