@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import '../../amplifyConfigure'
 import type { AppProps } from "next/app";
 import StoreProvider from '../Redux/provider';
 
